@@ -35,7 +35,7 @@ ASSIGN       : ':=' ;
 
 
 
-REALNUM      : INT '.' INT (EXPONENT)?;
+REALNUM      : (PLUS | MINUS)? INT '.' INT (EXPONENT)?;
 
 fragment 
 EXPONENT     : 'e' ('-')? INT ;
