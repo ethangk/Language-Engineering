@@ -29,7 +29,7 @@ compoundstatement :
 statement :
     variable ASSIGN^ expression
   | READ^ OPENPAREN! variable CLOSEPAREN!
-  | REPEAT^ compoundstatement untiltype
+  | REPEAT^ compoundstatement UNTIL! booltype
   | IF^ booltype
        compoundstatement
     (ELSE!
@@ -61,11 +61,11 @@ expression:
   ;
 
 pmterm:
-  ( PLUS | MINUS ) term
+  ( PLUS^ | MINUS^ ) term
  ;
 
 unaryop :
-      (( PLUS | MINUS )?)^ term
+      (( PLUS^ | MINUS^ )?) term
   ;
 
 term :
