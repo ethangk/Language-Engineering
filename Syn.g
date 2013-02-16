@@ -48,16 +48,13 @@ relation :
   | LEQUALS
  ;
 
-untiltype :
-  UNTIL^ booltype
- ;
 
 booltype :
   expression relation^ expression
  ;
 
 expression:
-  unaryop ( pmterm  )*
+  unaryop ( pmterm^  )*
   ;
 
 pmterm:
@@ -65,11 +62,11 @@ pmterm:
  ;
 
 unaryop :
-      (( PLUS^ | MINUS^ )?) term
+      ( PLUS^ | MINUS^ )? term
   ;
 
 term :
-   factor ( ( TIMES | DIVIDE )^ factor )*
+   factor ( ( TIMES^ | DIVIDE^ ) factor )*
  ;
 
 constant:
