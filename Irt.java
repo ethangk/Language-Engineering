@@ -135,6 +135,10 @@ public class Irt
         irt.addSub(irt1);
       }
     }
+    else if(tt == ASSIGN)
+    {
+      //try deailng with assign here
+    }
     else {
       error(tt);
     }

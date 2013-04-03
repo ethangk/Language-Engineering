@@ -34,6 +34,10 @@ public class Cg
       String e = expression(irt.getSub(0), o);
       emit(o, "WRR "+e);
     }
+    else if(irt.getOp().equals("STORE"))
+    {
+      //deal with assignment
+    }
     else {
       error(irt.getOp());
     }
