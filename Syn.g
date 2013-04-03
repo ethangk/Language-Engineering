@@ -54,16 +54,21 @@ booltype :
  ;
 
 expression:
-  unaryop ( pmterm^  )*
+  //(PLUS! | MINUS^)? term ( (PLUS | MINUS)^ term )*
+  unaryop ((PLUS^ | MINUS^) term)*
   ;
 
 pmterm:
   ( PLUS^ | MINUS^ ) term
  ;
 
-unaryop :
-      ( PLUS^ | MINUS^ )? term
-  ;
+
+
+unaryop
+    :   PLUS! term
+    |   MINUS term -> ^(MINUS REALNUM["0.0"] term)
+    |   term
+    ;
 
 term :
    factor ( ( TIMES^ | DIVIDE^ ) factor )*
