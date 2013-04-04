@@ -138,13 +138,11 @@ public class Irt
     else if(tt == ASSIGN)
     {
       //try deailng with assign here
-      irt.setOp("STORE");
+      irt.setOp("MOVE");
       IRTree irt2 = new IRTree();
-      expression((CommonTree)ast.getChild(0), irt1);
-      expression((CommonTree)ast.getChild(1), irt2);
-      irt.addSub(new IRTree("MEM"));
+      expression((CommonTree)ast.getChild(1), irt1);
+      irt.addSub(new IRTree("MEM", new IRTree((CommonTree)ast.getChild(0)));
       irt.addSub(irt1);
-      irt.addSub(irt2);
     }
     else {
       error(tt);
