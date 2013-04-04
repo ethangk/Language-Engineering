@@ -141,7 +141,6 @@ public class Irt
     {
       //try deailng with assign here
       irt.setOp("MOVE");
-
       IRTree iHold = new IRTree("MEM");
       IRTree iHold2 = new IRTree();
       String type = arg((CommonTree)ast.getChild(0), iHold2);
