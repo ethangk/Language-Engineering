@@ -141,7 +141,11 @@ public class Irt
     {
       //try deailng with assign here
       irt.setOp("MOVE");
-      IRTree iHold = new IRTree("MEM", (CommonTree)ast.getChild(0));
+
+      IRTree iHold = new IRTree("MEM");
+      IRTree iHold2 = new IRTree();
+      String type = arg((CommonTree)ast.getChild(0), iHold2);
+      iHold.addSub(iHold2);
       irt.addSub(iHold);
       expression((CommonTree)ast.getChild(1), irt1);
       irt.addSub(irt1);
