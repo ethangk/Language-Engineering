@@ -118,12 +118,14 @@ public class Irt
     IRTree irt1 = new IRTree();
     Token t = ast.getToken();
     int tt = t.getType();
-    if (tt == WRITELN) {
+    if (tt == WRITELN)
+    {
       String a = String.valueOf(Memory.allocateString("\n"));
       irt.setOp("WRS");
       irt.addSub(new IRTree("MEM", new IRTree("CONST", new IRTree(a))));
     }
-    else if (tt == WRITE) {
+    else if (tt == WRITE)
+    {
       ast1 = (CommonTree)ast.getChild(0);
       String type = arg(ast1, irt1);
       if (type.equals("real")) {
@@ -138,13 +140,11 @@ public class Irt
     else if(tt == ASSIGN)
     {
       //try deailng with assign here
-      irt.setOp("STORE");
-      IRTree irt2 = new IRTree();
-      expression((CommonTree)ast.getChild(0), irt1);
-      expression((CommonTree)ast.getChild(1), irt2);
-      irt.addSub(new IRTree("MEM"));
+      irt.setOp("MOVE");
+      IRTree iHold = new IRTree("MEM", (CommonTree)ast.getChild(0));
+      irt.addSub(iHold);
+      expression((CommonTree)ast.getChild(1), irt1);
       irt.addSub(irt1);
-      irt.addSub(irt2);
     }
     else {
       error(tt);
