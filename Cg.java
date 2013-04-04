@@ -37,6 +37,9 @@ public class Cg
     else if(irt.getOp().equals("STORE"))
     {
       //deal with assignment
+      System.out.println("here");
+      String e = expression(irt.getSub(0), o);
+      emit(o, "STORE");
     }
     else {
       error(irt.getOp());

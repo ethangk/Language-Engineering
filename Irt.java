@@ -24,7 +24,7 @@ public class Irt
 {
 // The code below is generated automatically from the ".tokens" file of the 
 // ANTLR syntax analysis, using the TokenConv program.
-//
+//c
 // CAMLE TOKENS BEGIN
   public static final String[] tokenNames = new String[] {
 "NONE", "NONE", "NONE", "NONE", "BEGIN", "END", "WRITE", "WRITELN", "ELSE", "IF", "READ", "REPEAT", "UNTIL", "SEMICOLON", "OPENPAREN", "CLOSEPAREN", "GREATER", "LESSER", "EQUALS", "DEQUALS", "GEQUALS", "LEQUALS", "PLUS", "MINUS", "TIMES", "DIVIDE", "ASSIGN", "INT", "EXPONENT", "REALNUM", "CHAR", "IDENT", "STRING", "COMMENT", "WS"};
@@ -138,6 +138,13 @@ public class Irt
     else if(tt == ASSIGN)
     {
       //try deailng with assign here
+      irt.setOp("STORE");
+      IRTree irt2 = new IRTree();
+      expression((CommonTree)ast.getChild(0), irt1);
+      expression((CommonTree)ast.getChild(1), irt2);
+      irt.addSub(new IRTree("MEM"));
+      irt.addSub(irt1);
+      irt.addSub(irt2);
     }
     else {
       error(tt);
