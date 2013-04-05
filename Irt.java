@@ -140,7 +140,7 @@ public class Irt
     else if(tt == ASSIGN)
     {
       //try deailng with assign here
-      irt.setOp("MOVE");
+      irt.setOp("ASSIGN");
       IRTree iHold = new IRTree("MEM");
       IRTree iHold2 = new IRTree();
       String type = arg((CommonTree)ast.getChild(0), iHold2);
