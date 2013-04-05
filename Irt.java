@@ -147,6 +147,10 @@ public class Irt
       expression((CommonTree)ast.getChild(1), irt1);
       irt.addSub(irt1);
     }
+    else if(tt == MEM)
+    {
+      System.out.println("GOT MEM TYPE");
+    }
     else {
       error(tt);
     }
@@ -201,6 +205,8 @@ public class Irt
   irt.addSub(irt1);
   irt.addSub(irt2);
     }
+    else
+	System.out.println("unrecognised type " + tt);
   }
 
   // Convert a constant AST to IR tree
