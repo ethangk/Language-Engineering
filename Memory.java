@@ -1,9 +1,12 @@
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Hashtable;
 import java.io.*;
 
 public class Memory {
 
   static ArrayList<Byte> memory = new ArrayList<Byte>();
+  static Hashtable<String,Integer> varToMem = new Hashtable<String,Integer>();
 
   static public int allocateString(String text)
   {
@@ -14,6 +17,26 @@ public class Memory {
     }
     memory.add(new Byte("", 0));
     return addr;
+  }
+
+  static public int allocateReal(String varname)
+  {
+    
+      
+      System.out.println("mem size = " + memory.size() + ", mem diff = " + (memory.size()%4));
+      for(int i = 0; i < (4 - (memory.size()%4)); i++)
+          memory.add(new Byte("", 0));
+
+      System.out.println("mem size = " + memory.size() + ", mem diff = " + (memory.size()%4));
+      if(varToMem.contains(varname))
+          return varToMem.get(varname);
+      else
+      {
+        varToMem.put(varname, memory.size());
+        for(int i = 0; i<4; i++)
+            memory.add(new Byte("", 0));
+        return memory.size()-4;
+      }
   }
 
   static public void dumpData(PrintStream o)
