@@ -79,7 +79,7 @@ public class Cg
           }
     }
     else {
-      error(irt.getOp());
+      error(" - expression - " + irt.getOp());
     }
     return result;  // Return name of the register holding expression's value
   }

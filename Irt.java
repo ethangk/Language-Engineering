@@ -141,7 +141,7 @@ public class Irt
     {
       //try deailng with assign here
       irt.setOp("ASSIGN");
-      IRTree iHold = new IRTree("MEM", new IRTree(String.valueOf(Memory.allocateReal(ast.getChild(0).getText()))));
+      IRTree iHold = new IRTree("MEM", new IRTree("CONST", new IRTree(String.valueOf(Memory.allocateReal(ast.getChild(0).getText())))));
       System.out.println("var name = " + ast.getChild(0).getText());
       irt.addSub(iHold);
       expression((CommonTree)ast.getChild(1), irt1);
