@@ -1,0 +1,11 @@
+{test3: program to test expressions containing operators.}
+{Already tested: write statements and constants.}
+begin
+  write(-5.0);
+  writeln;
+  write(+4.0+3.0);
+  writeln;
+  writeln;
+  writeln;
+  writeln;
+end

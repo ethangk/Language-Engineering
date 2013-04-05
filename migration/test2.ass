@@ -1,0 +1,2 @@
+XOR R0,R0,R0
+STORE

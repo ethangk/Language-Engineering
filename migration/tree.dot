@@ -1,0 +1,69 @@
+digraph {
+
+	ordering=out;
+	ranksep=.4;
+	bgcolor="lightgrey"; node [shape=box, fixedsize=false, fontsize=12, fontname="Helvetica-bold", fontcolor="blue"
+		width=.25, height=.25, color="black", fillcolor="white", style="filled, solid, bold"];
+	edge [arrowsize=.5, color="black", style="bold"]
+
+  n0 [label="begin"];
+  n1 [label=":="];
+  n1 [label=":="];
+  n2 [label="i"];
+  n3 [label="10023.0"];
+  n4 [label="write"];
+  n4 [label="write"];
+  n5 [label="i"];
+  n6 [label="writeln"];
+  n7 [label=":="];
+  n7 [label=":="];
+  n8 [label="a"];
+  n9 [label="i"];
+  n10 [label="write"];
+  n10 [label="write"];
+  n11 [label="a"];
+  n12 [label="writeln"];
+  n13 [label=":="];
+  n13 [label=":="];
+  n14 [label="j"];
+  n15 [label="76.5"];
+  n16 [label="write"];
+  n16 [label="write"];
+  n17 [label="j"];
+  n18 [label="writeln"];
+  n19 [label=":="];
+  n19 [label=":="];
+  n20 [label="a"];
+  n21 [label="j"];
+  n22 [label="write"];
+  n22 [label="write"];
+  n23 [label="a"];
+  n24 [label="writeln"];
+
+  n0 -> n1 // "begin" -> ":="
+  n1 -> n2 // ":=" -> "i"
+  n1 -> n3 // ":=" -> "10023.0"
+  n0 -> n4 // "begin" -> "write"
+  n4 -> n5 // "write" -> "i"
+  n0 -> n6 // "begin" -> "writeln"
+  n0 -> n7 // "begin" -> ":="
+  n7 -> n8 // ":=" -> "a"
+  n7 -> n9 // ":=" -> "i"
+  n0 -> n10 // "begin" -> "write"
+  n10 -> n11 // "write" -> "a"
+  n0 -> n12 // "begin" -> "writeln"
+  n0 -> n13 // "begin" -> ":="
+  n13 -> n14 // ":=" -> "j"
+  n13 -> n15 // ":=" -> "76.5"
+  n0 -> n16 // "begin" -> "write"
+  n16 -> n17 // "write" -> "j"
+  n0 -> n18 // "begin" -> "writeln"
+  n0 -> n19 // "begin" -> ":="
+  n19 -> n20 // ":=" -> "a"
+  n19 -> n21 // ":=" -> "j"
+  n0 -> n22 // "begin" -> "write"
+  n22 -> n23 // "write" -> "a"
+  n0 -> n24 // "begin" -> "writeln"
+
+}
+
