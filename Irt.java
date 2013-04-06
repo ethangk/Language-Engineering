@@ -147,10 +147,6 @@ public class Irt
       expression((CommonTree)ast.getChild(1), irt1);
       irt.addSub(irt1);
     }
-    else if(tt == MEM)
-    {
-      System.out.println("GOT MEM TYPE");
-    }
     else {
       error(tt);
     }
