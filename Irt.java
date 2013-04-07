@@ -149,6 +149,16 @@ public class Irt
       irt.addSub(iHold);
       irt.addSub(irt1);
     }
+    else if(tt == READ)
+    {
+      irt.setOp("READIN");
+      String varName = ast.getChild(0).getText();
+      System.out.println("var name = " + varName + ", mem location = " + Memory.allocateReal(varName) + " ("+Memory.allocateReal(varName)+")");
+      IRTree iHold = new IRTree();
+      expression((CommonTree)ast.getChild(0), iHold);
+      irt.addSub(iHold);
+
+    }
     else {
       error(tt);
     }

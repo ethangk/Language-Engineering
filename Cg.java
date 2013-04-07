@@ -59,6 +59,14 @@ public class Cg
 	   emit(o, "STORE "+constReg+",R0,"+memOffset);
       }
     }
+    else if(irt.getOp().equals("READIN"))
+    {
+       System.out.println("here(L) " + irt.getSub(0).getSub(0).getSub(0).getOp() );
+       String memOffset = irt.getSub(0).getSub(0).getSub(0).getOp();
+       String inReg = Reg.newReg();
+	emit(o, "RDR "+ inReg);
+	emit(o, "STORE "+inReg+",R0,"+memOffset);
+    }
     else {
       error(irt.getOp());
     }
