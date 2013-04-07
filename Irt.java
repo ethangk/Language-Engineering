@@ -140,11 +140,13 @@ public class Irt
     else if(tt == ASSIGN)
     {
       //try deailng with assign here
-      irt.setOp("ASSIGN");
-      IRTree iHold = new IRTree("MEM", new IRTree("CONST", new IRTree(String.valueOf(Memory.allocateReal(ast.getChild(0).getText())))));
-      System.out.println("var name = " + ast.getChild(0).getText());
-      irt.addSub(iHold);
+      irt.setOp("MOVE");
+      String varName = ast.getChild(0).getText();
+      System.out.println("var name = " + varName + ", mem location = " + Memory.allocateReal(varName) + " ("+Memory.allocateReal(varName)+")");
+      IRTree iHold = new IRTree();
+      expression((CommonTree)ast.getChild(0), iHold);
       expression((CommonTree)ast.getChild(1), irt1);
+      irt.addSub(iHold);
       irt.addSub(irt1);
     }
     else {
@@ -178,7 +180,8 @@ public class Irt
     IRTree irt1 = new IRTree();
     Token t = ast.getToken();
     int tt = t.getType();
-    if (tt == REALNUM) {
+    if (tt == REALNUM)
+    {
       constant(ast, irt1);
       irt.setOp("CONST");
       irt.addSub(irt1);
@@ -198,11 +201,15 @@ public class Irt
 		irt.addSub(new IRTree("*"));
 	else if(tt == DIVIDE)
 		irt.addSub(new IRTree("/"));
-  irt.addSub(irt1);
-  irt.addSub(irt2);
+       irt.addSub(irt1);
+       irt.addSub(irt2);
     }
-    else
-	System.out.println("unrecognised type " + tt);
+    else if(tt == IDENT)
+    {
+       irt.setOp("MEM");
+       irt.addSub(new IRTree("CONST", new IRTree(String.valueOf(Memory.allocateReal(ast.getText())))));
+
+    }
   }
 
   // Convert a constant AST to IR tree

@@ -21,17 +21,14 @@ public class Memory {
 
   static public int allocateReal(String varname)
   {
-    
-      
-      System.out.println("mem size = " + memory.size() + ", mem diff = " + (memory.size()%4));
-      for(int i = 0; i < (4 - (memory.size()%4)); i++)
-          memory.add(new Byte("", 0));
-
-      System.out.println("mem size = " + memory.size() + ", mem diff = " + (memory.size()%4));
-      if(varToMem.contains(varname))
+      if(varToMem.containsKey(varname))
           return varToMem.get(varname);
       else
       {
+        int mBefore = memory.size();
+	 while(memory.size()%4 != 0)
+          memory.add(new Byte("", 0));
+        System.out.println("Memory size = " + memory.size() + ", m%4 = " + memory.size()%4 + ", mBefore = " + mBefore);
         varToMem.put(varname, memory.size());
         for(int i = 0; i<4; i++)
             memory.add(new Byte("", 0));

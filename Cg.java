@@ -34,11 +34,30 @@ public class Cg
       String e = expression(irt.getSub(0), o);
       emit(o, "WRR "+e);
     }
-    else if(irt.getOp().equals("ASSIGN"))
+    else if(irt.getOp().equals("MOVE"))
     {
       //deal with assignment
-      System.out.println("here " + irt.getSub(0).getSub(0).getOp() );
-      emit(o, "STORE");
+      System.out.println("here(L) " + irt.getSub(0).getSub(0).getSub(0).getOp() );
+      System.out.println("here(R) " + irt.getSub(1).getSub(0).getOp() );
+      if(irt.getSub(1).getSub(0).getOp().equals("CONST"))
+      {
+           //deal with memory loading
+	    System.out.println("MEM LOADING");
+	    String rightMemOffset = irt.getSub(1).getSub(0).getSub(0).getOp();
+	    String leftMemOffset = irt.getSub(0).getSub(0).getSub(0).getOp();
+           String loadReg = Reg.newReg();
+           emit(o, "LOAD "+loadReg+",R0,"+rightMemOffset);
+           emit(o, "STORE "+loadReg+",R0,"+leftMemOffset);
+      }
+      else
+      {
+          //Its a constant value, just use this;
+	   String memOffset = irt.getSub(0).getSub(0).getSub(0).getOp();
+	   String constVal = irt.getSub(1).getSub(0).getOp();
+          String constReg = Reg.newReg();
+          emit(o, "MOVIR "+constReg+","+constVal);
+	   emit(o, "STORE "+constReg+",R0,"+memOffset);
+      }
     }
     else {
       error(irt.getOp());
@@ -76,6 +95,12 @@ public class Cg
           {
               emit(o, "DIVR " + result + "," + e + "," + f);
           }
+    }
+    else if(irt.getOp().equals("MEM"))
+    {
+          String memAddr = irt.getSub(0).getSub(0).getOp();
+	   result = Reg.newReg();
+	   emit(o, "LOAD "+result+",R0,"+memAddr);
     }
     else {
       error(" - expression - " + irt.getOp());
