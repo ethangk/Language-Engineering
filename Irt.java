@@ -159,6 +159,15 @@ public class Irt
       irt.addSub(iHold);
 
     }
+    else if(tt == IF)
+    {
+      System.out.println("Got if");
+
+    }
+    else if(tt == ELSE)
+    {
+       System.out.println("Got else");
+    }
     else {
       error(tt);
     }
