@@ -162,11 +162,11 @@ public class Irt
     else if(tt == IF)
     {
       System.out.println("Got if");
+      irt.setOp("IF");
+      //irt.addSub(new IRTree("LABEL", new IRTree("
+      //Need to add the label sub to all the stuff after the if, then in Cg emit(o, "labelname: OPCODE")
+      //I also need some sort of label counter, so it will be if->lCOUNT, else->lCOUNTelse..lCOUNTafter
 
-    }
-    else if(tt == ELSE)
-    {
-       System.out.println("Got else");
     }
     else {
       error(tt);
