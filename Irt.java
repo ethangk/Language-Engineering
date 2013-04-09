@@ -165,7 +165,7 @@ public class Irt
     {
       irt.setOp("IF");
       IRTree ifTree = new IRTree();
-      ifTree.addSub(new IRTree("LABEL", new IRTree("STARTL"+labelcount)));
+      ifTree.addSub(new IRTree("LABEL", new IRTree("ENDL"+labelcount)));
       ifTree.addSub(convert((CommonTree)ast.getChild(1)));
       //Need to add the label sub to all the stuff after the if, then in Cg emit(o, "labelname: OPCODE")
       //I also need some sort of label counter, so it will be if->lCOUNT, else->lCOUNTelse..lCOUNTafter
@@ -181,7 +181,7 @@ public class Irt
       else
       {
          ifType = new IRTree("IFTYPE");
-	  elseTree.addSub(new IRTree("LABEL", new IRTree("POSTL"+labelcount)));
+	       elseTree.addSub(new IRTree("LABEL", new IRTree("POSTL"+labelcount)));
       }
       IRTree ifConditions = new IRTree();
       expression((CommonTree)ast.getChild(0), ifConditions);
@@ -257,14 +257,15 @@ public class Irt
     else if(tt == EQUALS || tt == GREATER || tt == LESSER || tt == DEQUALS || tt == GEQUALS || tt == LEQUALS)
     {
 	//move to cg, check the op (if its equals, use the opcode for one side minus the other)
+	irt.setOp("BINOP2");
 	switch(tt)
 	{
-	  case EQUALS:  irt.setOp("EQUALS");  break;
-	  case GREATER: irt.setOp("GREATER"); break;
-	  case LESSER:  irt.setOp("LESSER");  break;
-	  case DEQUALS: irt.setOp("DEQUALS"); break;
-	  case GEQUALS: irt.setOp("GEQUALS"); break;
-	  case LEQUALS: irt.setOp("LEQUALS"); break;
+	  case EQUALS:  irt.addSub(new IRTree("EQUALS"));   break;
+	  case GREATER: irt.addSub(new IRTree("GREATER"));  break;
+	  case LESSER:  irt.addSub(new IRTree("LESSER"));   break;
+	  case DEQUALS: irt.addSub(new IRTree("DEQUALS"));  break;
+	  case GEQUALS: irt.addSub(new IRTree("GEQUALS"));  break;
+	  case LEQUALS: irt.addSub(new IRTree("LEQUALS"));  break;
 	}
 	IRTree irt2 = new IRTree();
 	expression((CommonTree)ast.getChild(0), irt1);

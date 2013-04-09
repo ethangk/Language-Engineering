@@ -38,51 +38,52 @@ public class Cg
     {
       //deal with assignment
       System.out.println("here(L) " + irt.getSub(0).getSub(0).getSub(0).getOp() );
-      System.out.println("here(R) " + irt.getSub(1).getSub(0).getOp() );
-      if(irt.getSub(1).getSub(0).getOp().equals("CONST"))
-      {
-           //deal with memory loading
-	    String rightMemOffset = irt.getSub(1).getSub(0).getSub(0).getOp();
-	    String leftMemOffset = irt.getSub(0).getSub(0).getSub(0).getOp();
-           String loadReg = Reg.newReg();
-           emit(o, "LOAD "+loadReg+",R0,"+rightMemOffset);
-           emit(o, "STORE "+loadReg+",R0,"+leftMemOffset);
-      }
-      else
-      {
-          //Its a constant value, just use this;
-	   String memOffset = irt.getSub(0).getSub(0).getSub(0).getOp();
-          String e = expression(irt.getSub(1).getSub(0), o);
-          String constReg = Reg.newReg();
-          emit(o, "MOVIR "+constReg+","+e);
-	   emit(o, "STORE "+constReg+",R0,"+memOffset);
-      }
+      String memOffset = irt.getSub(0).getSub(0).getSub(0).getOp();
+      String e = expression(irt.getSub(1), o);
+      emit(o, "STORE "+e+",R0,"+memOffset);
     }
     else if(irt.getOp().equals("READIN"))
     {
-       System.out.println("here(L) " + irt.getSub(0).getSub(0).getSub(0).getOp() );
-       String memOffset = irt.getSub(0).getSub(0).getSub(0).getOp();
-       String inReg = Reg.newReg();
-	emit(o, "RDR "+ inReg);
-	emit(o, "STORE "+inReg+",R0,"+memOffset);
+      System.out.println("here(L) " + irt.getSub(0).getSub(0).getSub(0).getOp() );
+      String memOffset = irt.getSub(0).getSub(0).getSub(0).getOp();
+      String inReg = Reg.newReg();
+      emit(o, "RDR "+ inReg);
+      emit(o, "STORE "+inReg+",R0,"+memOffset);
     }
     else if(irt.getOp().equals("IF"))
     {
-       System.out.println("here(L) " + irt.getSub(3).getOp() );
-       //System.out.println("here(L) " + irt.getSub(1).getSub(0).getSub(0).getOp() );
-	emit(o, irt.getSub(1).getSub(0).getSub(0).getOp() + ":NOP");
-	statement(irt.getSub(1).getSub(1), o);
-	System.out.println("iftype = " + irt.getSub(0).getOp());
-	if(irt.getSub(0).getOp().equals("IFTYPE"))
-       {
-	   //no else statement, dump end code
-	   emit(o, irt.getSub(2).getSub(0).getSub(0).getOp() + ":NOP");
-       }
- 	else
-	{
-	   emit(o, irt.getSub(2).getSub(0).getSub(0).getOp() + ":NOP");
-	   statement(irt.getSub(2).getSub(1), o);
-	}
+      //System.out.println("here(L) " + irt.getSub(3).getSub(0).getOp() + ", " + irt.getSub(3).getSub(1).getOp());
+    	String leftCondReg = expression(irt.getSub(3).getSub(1), o);
+    	String rightCondReg = expression(irt.getSub(3).getSub(2), o);
+      String regHold = Reg.newReg();
+      System.out.println("condition = " + irt.getSub(3).getSub(0).getOp());
+      if(irt.getSub(3).getSub(0).getOp().equals("EQUALS"))
+      {
+          emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
+          emit(o, "BNEZR " + regHold + "," + irt.getSub(2).getSub(0).getSub(0).getOp());
+      }
+      else if(irt.getSub(3).getSub(0).getOp().equals("GREATER"))
+      {
+          emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
+          emit(o, "BLTZ " + regHold + "," + irt.getSub(2).getSub(0).getSub(0).getOp());
+      }
+      else if(irt.getSub(3).getSub(0).getOp().equals("DEQUALS"))
+      {
+          emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
+          emit(o, "BEQZR " + regHold + "," + irt.getSub(2).getSub(0).getSub(0).getOp());
+      }
+
+      //emit(o, irt.getSub(1).getSub(0).getSub(0).getOp() + ":NOP");
+      //Generate the code for the IF part
+      statement(irt.getSub(1).getSub(1), o);
+      System.out.println("ENDL = " + irt.getSub(1).getSub(0).getSub(0).getOp());
+      emit(o, "JMP " + irt.getSub(1).getSub(0).getSub(0).getOp());
+      emit(o, irt.getSub(2).getSub(0).getSub(0).getOp() + ":NOP");
+      if(!irt.getSub(0).getOp().equals("IFTYPE"))
+        statement(irt.getSub(2).getSub(1), o);
+      emit(o, irt.getSub(1).getSub(0).getSub(0).getOp() + ":NOP");
+
+
     }
     else if(irt.getOp().equals("NOOP"))
     {
