@@ -42,7 +42,6 @@ public class Cg
       if(irt.getSub(1).getSub(0).getOp().equals("CONST"))
       {
            //deal with memory loading
-	    System.out.println("MEM LOADING");
 	    String rightMemOffset = irt.getSub(1).getSub(0).getSub(0).getOp();
 	    String leftMemOffset = irt.getSub(0).getSub(0).getSub(0).getOp();
            String loadReg = Reg.newReg();
@@ -66,6 +65,28 @@ public class Cg
        String inReg = Reg.newReg();
 	emit(o, "RDR "+ inReg);
 	emit(o, "STORE "+inReg+",R0,"+memOffset);
+    }
+    else if(irt.getOp().equals("IF"))
+    {
+       System.out.println("here(L) " + irt.getSub(3).getOp() );
+       //System.out.println("here(L) " + irt.getSub(1).getSub(0).getSub(0).getOp() );
+	emit(o, irt.getSub(1).getSub(0).getSub(0).getOp() + ":NOP");
+	statement(irt.getSub(1).getSub(1), o);
+	System.out.println("iftype = " + irt.getSub(0).getOp());
+	if(irt.getSub(0).getOp().equals("IFTYPE"))
+       {
+	   //no else statement, dump end code
+	   emit(o, irt.getSub(2).getSub(0).getSub(0).getOp() + ":NOP");
+       }
+ 	else
+	{
+	   emit(o, irt.getSub(2).getSub(0).getSub(0).getOp() + ":NOP");
+	   statement(irt.getSub(2).getSub(1), o);
+	}
+    }
+    else if(irt.getOp().equals("NOOP"))
+    {
+	//do nuthin
     }
     else {
       error(irt.getOp());
