@@ -52,9 +52,9 @@ public class Cg
       {
           //Its a constant value, just use this;
 	   String memOffset = irt.getSub(0).getSub(0).getSub(0).getOp();
-	   String constVal = irt.getSub(1).getSub(0).getOp();
+          String e = expression(irt.getSub(1).getSub(0), o);
           String constReg = Reg.newReg();
-          emit(o, "MOVIR "+constReg+","+constVal);
+          emit(o, "MOVIR "+constReg+","+e);
 	   emit(o, "STORE "+constReg+",R0,"+memOffset);
       }
     }

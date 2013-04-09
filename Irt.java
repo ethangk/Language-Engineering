@@ -257,8 +257,16 @@ public class Irt
     else if(tt == EQUALS || tt == GREATER || tt == LESSER || tt == DEQUALS || tt == GEQUALS || tt == LEQUALS)
     {
 	//move to cg, check the op (if its equals, use the opcode for one side minus the other)
-	irt.setOp(tt);
-	IRTree itr2 = new IRTree();
+	switch(tt)
+	{
+	  case EQUALS:  irt.setOp("EQUALS");  break;
+	  case GREATER: irt.setOp("GREATER"); break;
+	  case LESSER:  irt.setOp("LESSER");  break;
+	  case DEQUALS: irt.setOp("DEQUALS"); break;
+	  case GEQUALS: irt.setOp("GEQUALS"); break;
+	  case LEQUALS: irt.setOp("LEQUALS"); break;
+	}
+	IRTree irt2 = new IRTree();
 	expression((CommonTree)ast.getChild(0), irt1);
 	expression((CommonTree)ast.getChild(1), irt2);
 	irt.addSub(irt1);
