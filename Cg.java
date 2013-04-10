@@ -64,13 +64,28 @@ public class Cg
       }
       else if(irt.getSub(3).getSub(0).getOp().equals("GREATER"))
       {
-          emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
-          emit(o, "BLTZ " + regHold + "," + irt.getSub(2).getSub(0).getSub(0).getOp());
+          emit(o, "SUBR " + regHold + "," + rightCondReg + "," + leftCondReg);
+          emit(o, "BGEZR " + regHold + "," + irt.getSub(2).getSub(0).getSub(0).getOp());
+      }
+      else if(irt.getSub(3).getSub(0).getOp().equals("LESSER"))
+      {
+          emit(o, "SUBR " + regHold + "," + rightCondReg + "," + leftCondReg);
+          emit(o, "BLTZR " + regHold + "," + irt.getSub(2).getSub(0).getSub(0).getOp());
       }
       else if(irt.getSub(3).getSub(0).getOp().equals("DEQUALS"))
       {
           emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
           emit(o, "BEQZR " + regHold + "," + irt.getSub(2).getSub(0).getSub(0).getOp());
+      }
+      else if(irt.getSub(3).getSub(0).getOp().equals("LEQUALS"))
+      {
+          emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
+          emit(o, "BGEZR " + regHold + "," + irt.getSub(2).getSub(0).getSub(0).getOp());
+      }
+      else if(irt.getSub(3).getSub(0).getOp().equals("GEQUALS"))
+      {
+          emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
+          emit(o, "BLTZR " + regHold + "," + irt.getSub(2).getSub(0).getSub(0).getOp());
       }
 
       //emit(o, irt.getSub(1).getSub(0).getSub(0).getOp() + ":NOP");
