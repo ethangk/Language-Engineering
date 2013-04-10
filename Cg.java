@@ -52,57 +52,41 @@ public class Cg
     }
     else if(irt.getOp().equals("IF"))
     {
-      //System.out.println("here(L) " + irt.getSub(3).getSub(0).getOp() + ", " + irt.getSub(3).getSub(1).getOp());
-    	String leftCondReg = expression(irt.getSub(3).getSub(1), o);
-    	String rightCondReg = expression(irt.getSub(3).getSub(2), o);
-      String regHold = Reg.newReg();
-      System.out.println("condition = " + irt.getSub(3).getSub(0).getOp());
-      if(irt.getSub(3).getSub(0).getOp().equals("EQUALS"))
-      {
-          emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
-          emit(o, "BNEZR " + regHold + "," + irt.getSub(2).getSub(0).getSub(0).getOp());
-      }
-      else if(irt.getSub(3).getSub(0).getOp().equals("GREATER"))
-      {
-          emit(o, "SUBR " + regHold + "," + rightCondReg + "," + leftCondReg);
-          emit(o, "BGEZR " + regHold + "," + irt.getSub(2).getSub(0).getSub(0).getOp());
-      }
-      else if(irt.getSub(3).getSub(0).getOp().equals("LESSER"))
-      {
-          emit(o, "SUBR " + regHold + "," + rightCondReg + "," + leftCondReg);
-          emit(o, "BLTZR " + regHold + "," + irt.getSub(2).getSub(0).getSub(0).getOp());
-      }
-      else if(irt.getSub(3).getSub(0).getOp().equals("DEQUALS"))
-      {
-          emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
-          emit(o, "BEQZR " + regHold + "," + irt.getSub(2).getSub(0).getSub(0).getOp());
-      }
-      else if(irt.getSub(3).getSub(0).getOp().equals("LEQUALS"))
-      {
-          emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
-          emit(o, "BGEZR " + regHold + "," + irt.getSub(2).getSub(0).getSub(0).getOp());
-      }
-      else if(irt.getSub(3).getSub(0).getOp().equals("GEQUALS"))
-      {
-          emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
-          emit(o, "BLTZR " + regHold + "," + irt.getSub(2).getSub(0).getSub(0).getOp());
-      }
 
-      //emit(o, irt.getSub(1).getSub(0).getSub(0).getOp() + ":NOP");
-      //Generate the code for the IF part
-      statement(irt.getSub(1).getSub(1), o);
-      System.out.println("ENDL = " + irt.getSub(1).getSub(0).getSub(0).getOp());
-      emit(o, "JMP " + irt.getSub(1).getSub(0).getSub(0).getOp());
-      emit(o, irt.getSub(2).getSub(0).getSub(0).getOp() + ":NOP");
+      String postLabel = irt.getSub(1).getSub(3).getSub(0).getSub(0).getOp();
+
+      expression(irt.getSub(1), o);
+      statement(irt.getSub(2).getSub(0), o);
+      System.out.println("something = " + irt.getSub(3).getOp());
+
       if(!irt.getSub(0).getOp().equals("IFTYPE"))
-        statement(irt.getSub(2).getSub(1), o);
-      emit(o, irt.getSub(1).getSub(0).getSub(0).getOp() + ":NOP");
+      {
+         postLabel = irt.getSub(1).getSub(3).getSub(1).getSub(0).getOp();
+         String elseLabel = irt.getSub(1).getSub(3).getSub(0).getSub(0).getOp();
+         emit(o, "JMP " + postLabel);
+         emit(o, elseLabel + ":NOP");
+         statement(irt.getSub(3).getSub(0), o);
+      }
+      emit(o, postLabel + ":NOP");
+
+
 
 
     }
     else if(irt.getOp().equals("NOOP"))
     {
 	//do nuthin
+    }
+    else if(irt.getOp().equals("REPEAT"))
+    {
+        String condLabel = irt.getSub(2).getSub(0).getOp();
+        String postLabel = irt.getSub(1).getSub(3).getSub(0).getSub(0).getOp();
+        System.out.println("conl = " + postLabel);
+        emit(o, condLabel + ":NOP");
+        expression(irt.getSub(1), o);
+        statement(irt.getSub(0), o);
+        emit(o, "JMP "+condLabel);
+        emit(o, postLabel + ":NOP");
     }
     else {
       error(irt.getOp());
@@ -146,6 +130,44 @@ public class Cg
           String memAddr = irt.getSub(0).getSub(0).getOp();
 	   result = Reg.newReg();
 	   emit(o, "LOAD "+result+",R0,"+memAddr);
+    }
+    else if(irt.getOp().equals("CONDITIONS"))
+    {
+        String operator = irt.getSub(0).getOp();
+        String leftCondReg = expression(irt.getSub(1), o);
+        String rightCondReg = expression(irt.getSub(2), o);
+        String regHold = Reg.newReg();
+        String jumpLabel = irt.getSub(3).getSub(0).getSub(0).getOp();
+        if(operator.equals("EQUALS"))
+        {
+            emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
+            emit(o, "BNEZR " + regHold + "," + jumpLabel);
+        }
+        else if(operator.equals("GREATER"))
+        {
+            emit(o, "SUBR " + regHold + "," + rightCondReg + "," + leftCondReg);
+            emit(o, "BGEZR " + regHold + "," + jumpLabel);
+        }
+        else if(operator.equals("LESSER"))
+        {
+            emit(o, "SUBR " + regHold + "," + rightCondReg + "," + leftCondReg);
+            emit(o, "BLTZR " + regHold + "," + jumpLabel);
+        }
+        else if(operator.equals("DEQUALS"))
+        {
+            emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
+            emit(o, "BEQZR " + regHold + "," + jumpLabel);
+        }
+        else if(operator.equals("LEQUALS"))
+        {
+            emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
+            emit(o, "BGEZR " + regHold + "," + jumpLabel);
+        }
+        else if(operator.equals("GEQUALS"))
+        {
+            emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
+            emit(o, "BLTZR " + regHold + "," + jumpLabel);
+        }
     }
     else {
       error(" - expression - " + irt.getOp());

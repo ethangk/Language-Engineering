@@ -165,33 +165,43 @@ public class Irt
     {
       irt.setOp("IF");
       IRTree ifTree = new IRTree();
-      ifTree.addSub(new IRTree("LABEL", new IRTree("ENDL"+labelcount)));
+      IRTree elseTree = new IRTree("ELSETREE");
+      IRTree ifType = new IRTree("IFTYPE");
       ifTree.addSub(convert((CommonTree)ast.getChild(1)));
-      //Need to add the label sub to all the stuff after the if, then in Cg emit(o, "labelname: OPCODE")
-      //I also need some sort of label counter, so it will be if->lCOUNT, else->lCOUNTelse..lCOUNTafter
-      //maybe need to have label -> rest of code, we'll see
-      IRTree elseTree = new IRTree();
-      IRTree ifType;
+      IRTree labels = new IRTree();
       if(ast.getChildCount() > 2)
       {
-         elseTree.addSub(new IRTree("LABEL", new IRTree("ELSEL"+labelcount)));
          elseTree.addSub(convert((CommonTree)ast.getChild(2)));
          ifType = new IRTree("ELSETYPE");
+         labels.addSub(new IRTree("LABEL", new IRTree("ELSEL"+labelcount)));
       }
-      else
-      {
-         ifType = new IRTree("IFTYPE");
-	       elseTree.addSub(new IRTree("LABEL", new IRTree("POSTL"+labelcount)));
-      }
+      labels.addSub(new IRTree("LABEL", new IRTree("POSTL"+labelcount)));
+
       IRTree ifConditions = new IRTree();
       expression((CommonTree)ast.getChild(0), ifConditions);
+      ifConditions.addSub(labels);
       irt.addSub(ifType);
+      irt.addSub(ifConditions);
       irt.addSub(ifTree);
       irt.addSub(elseTree);
-      ifConditions.setOp("CONDITIONS");
-      irt.addSub(ifConditions);
       labelcount++; 
 
+    }
+    else if(tt == REPEAT)
+    {
+      IRTree conditions     = new IRTree();
+      IRTree labels         = new IRTree();
+      IRTree postLabel      = new IRTree("LABEL", new IRTree("POSTL"+labelcount));
+      IRTree conditionLabel = new IRTree("LABEL", new IRTree("CONDL"+labelcount));
+      //make sure it matches the IF stuff, so I can run it through expression->conditions
+      labels.addSub(postLabel);
+      expression((CommonTree)ast.getChild(1), conditions);
+      conditions.addSub(labels);
+      irt.setOp("REPEAT");
+      irt.addSub(convert((CommonTree)ast.getChild(0)));
+      irt.addSub(conditions);
+      irt.addSub(conditionLabel);
+      labelcount++;
     }
     else {
       error(tt);
@@ -237,14 +247,14 @@ public class Irt
       IRTree irt2 = new IRTree();
       expression((CommonTree)ast.getChild(0), irt1);
       expression((CommonTree)ast.getChild(1), irt2);
-	if(tt == PLUS)
-     		 irt.addSub(new IRTree("+")); 
-	else if(tt == MINUS)
-		irt.addSub(new IRTree("-"));
-	else if(tt == TIMES)
-		irt.addSub(new IRTree("*"));
-	else if(tt == DIVIDE)
-		irt.addSub(new IRTree("/"));
+    	if(tt == PLUS)
+         		 irt.addSub(new IRTree("+")); 
+    	else if(tt == MINUS)
+    		irt.addSub(new IRTree("-"));
+    	else if(tt == TIMES)
+    		irt.addSub(new IRTree("*"));
+    	else if(tt == DIVIDE)
+    		irt.addSub(new IRTree("/"));
        irt.addSub(irt1);
        irt.addSub(irt2);
     }
@@ -256,22 +266,22 @@ public class Irt
     }
     else if(tt == EQUALS || tt == GREATER || tt == LESSER || tt == DEQUALS || tt == GEQUALS || tt == LEQUALS)
     {
-	//move to cg, check the op (if its equals, use the opcode for one side minus the other)
-	irt.setOp("BINOP2");
-	switch(tt)
-	{
-	  case EQUALS:  irt.addSub(new IRTree("EQUALS"));   break;
-	  case GREATER: irt.addSub(new IRTree("GREATER"));  break;
-	  case LESSER:  irt.addSub(new IRTree("LESSER"));   break;
-	  case DEQUALS: irt.addSub(new IRTree("DEQUALS"));  break;
-	  case GEQUALS: irt.addSub(new IRTree("GEQUALS"));  break;
-	  case LEQUALS: irt.addSub(new IRTree("LEQUALS"));  break;
-	}
-	IRTree irt2 = new IRTree();
-	expression((CommonTree)ast.getChild(0), irt1);
-	expression((CommonTree)ast.getChild(1), irt2);
-	irt.addSub(irt1);
-	irt.addSub(irt2);
+	       //move to cg, check the op (if its equals, use the opcode for one side minus the other)
+      	irt.setOp("CONDITIONS");
+      	switch(tt)
+      	{
+      	  case EQUALS:  irt.addSub(new IRTree("EQUALS"));   break;
+      	  case GREATER: irt.addSub(new IRTree("GREATER"));  break;
+      	  case LESSER:  irt.addSub(new IRTree("LESSER"));   break;
+      	  case DEQUALS: irt.addSub(new IRTree("DEQUALS"));  break;
+      	  case GEQUALS: irt.addSub(new IRTree("GEQUALS"));  break;
+      	  case LEQUALS: irt.addSub(new IRTree("LEQUALS"));  break;
+      	}
+      	IRTree irt2 = new IRTree();
+      	expression((CommonTree)ast.getChild(0), irt1);
+      	expression((CommonTree)ast.getChild(1), irt2);
+      	irt.addSub(irt1);
+      	irt.addSub(irt2);
     } 
     else
     {
