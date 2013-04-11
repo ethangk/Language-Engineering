@@ -116,6 +116,9 @@ public class Irt
   // Convert a statement AST to IR tree
   public static void statement(CommonTree ast, IRTree irt)
   {
+
+
+    labelcount++;
     CommonTree ast1;
     IRTree irt1 = new IRTree();
     Token t = ast.getToken();
@@ -144,7 +147,6 @@ public class Irt
       //try deailng with assign here
       irt.setOp("MOVE");
       String varName = ast.getChild(0).getText();
-      System.out.println("var name = " + varName + ", mem location = " + Memory.allocateReal(varName) + " ("+Memory.allocateReal(varName)+")");
       IRTree iHold = new IRTree();
       expression((CommonTree)ast.getChild(0), iHold);
       expression((CommonTree)ast.getChild(1), irt1);
@@ -155,7 +157,6 @@ public class Irt
     {
       irt.setOp("READIN");
       String varName = ast.getChild(0).getText();
-      System.out.println("var name = " + varName + ", mem location = " + Memory.allocateReal(varName) + " ("+Memory.allocateReal(varName)+")");
       IRTree iHold = new IRTree();
       expression((CommonTree)ast.getChild(0), iHold);
       irt.addSub(iHold);
@@ -164,27 +165,29 @@ public class Irt
     else if(tt == IF)
     {
       irt.setOp("IF");
+
       IRTree ifTree = new IRTree();
       IRTree elseTree = new IRTree("ELSETREE");
       IRTree ifType = new IRTree("IFTYPE");
       ifTree.addSub(convert((CommonTree)ast.getChild(1)));
       IRTree labels = new IRTree();
+      int labelHold = labelcount;
       if(ast.getChildCount() > 2)
       {
          elseTree.addSub(convert((CommonTree)ast.getChild(2)));
          ifType = new IRTree("ELSETYPE");
-         labels.addSub(new IRTree("LABEL", new IRTree("ELSEL"+labelcount)));
+         labels.addSub(new IRTree("LABEL", new IRTree("ELSEL"+labelHold)));
       }
-      labels.addSub(new IRTree("LABEL", new IRTree("POSTL"+labelcount)));
+      labels.addSub(new IRTree("LABEL", new IRTree("POSTL"+labelHold)));
 
       IRTree ifConditions = new IRTree();
       expression((CommonTree)ast.getChild(0), ifConditions);
+      ifConditions.setOp("IFCONDITIONS");
       ifConditions.addSub(labels);
       irt.addSub(ifType);
       irt.addSub(ifConditions);
       irt.addSub(ifTree);
       irt.addSub(elseTree);
-      labelcount++; 
 
     }
     else if(tt == REPEAT)
@@ -195,13 +198,14 @@ public class Irt
       IRTree conditionLabel = new IRTree("LABEL", new IRTree("CONDL"+labelcount));
       //make sure it matches the IF stuff, so I can run it through expression->conditions
       labels.addSub(postLabel);
+      System.out.println("REPEAT OP = "+ ast.getChild(1).getText());
       expression((CommonTree)ast.getChild(1), conditions);
+      conditions.setOp("REPEATCONDITIONS");
       conditions.addSub(labels);
       irt.setOp("REPEAT");
       irt.addSub(convert((CommonTree)ast.getChild(0)));
       irt.addSub(conditions);
       irt.addSub(conditionLabel);
-      labelcount++;
     }
     else {
       error(tt);
@@ -267,7 +271,7 @@ public class Irt
     else if(tt == EQUALS || tt == GREATER || tt == LESSER || tt == DEQUALS || tt == GEQUALS || tt == LEQUALS)
     {
 	       //move to cg, check the op (if its equals, use the opcode for one side minus the other)
-      	irt.setOp("CONDITIONS");
+      	
       	switch(tt)
       	{
       	  case EQUALS:  irt.addSub(new IRTree("EQUALS"));   break;

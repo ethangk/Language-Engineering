@@ -37,14 +37,12 @@ public class Cg
     else if(irt.getOp().equals("MOVE"))
     {
       //deal with assignment
-      System.out.println("here(L) " + irt.getSub(0).getSub(0).getSub(0).getOp() );
       String memOffset = irt.getSub(0).getSub(0).getSub(0).getOp();
       String e = expression(irt.getSub(1), o);
       emit(o, "STORE "+e+",R0,"+memOffset);
     }
     else if(irt.getOp().equals("READIN"))
     {
-      System.out.println("here(L) " + irt.getSub(0).getSub(0).getSub(0).getOp() );
       String memOffset = irt.getSub(0).getSub(0).getSub(0).getOp();
       String inReg = Reg.newReg();
       emit(o, "RDR "+ inReg);
@@ -57,8 +55,7 @@ public class Cg
 
       expression(irt.getSub(1), o);
       statement(irt.getSub(2).getSub(0), o);
-      System.out.println("something = " + irt.getSub(3).getOp());
-
+      
       if(!irt.getSub(0).getOp().equals("IFTYPE"))
       {
          postLabel = irt.getSub(1).getSub(3).getSub(1).getSub(0).getOp();
@@ -131,7 +128,7 @@ public class Cg
 	   result = Reg.newReg();
 	   emit(o, "LOAD "+result+",R0,"+memAddr);
     }
-    else if(irt.getOp().equals("CONDITIONS"))
+    else if(irt.getOp().equals("IFCONDITIONS"))
     {
         String operator = irt.getSub(0).getOp();
         String leftCondReg = expression(irt.getSub(1), o);
@@ -150,8 +147,8 @@ public class Cg
         }
         else if(operator.equals("LESSER"))
         {
-            emit(o, "SUBR " + regHold + "," + rightCondReg + "," + leftCondReg);
-            emit(o, "BLTZR " + regHold + "," + jumpLabel);
+            emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
+            emit(o, "BGEZR " + regHold + "," + jumpLabel);
         }
         else if(operator.equals("DEQUALS"))
         {
@@ -160,10 +157,48 @@ public class Cg
         }
         else if(operator.equals("LEQUALS"))
         {
+            emit(o, "SUBR " + regHold + "," + rightCondReg + "," + leftCondReg);
+            emit(o, "BLTZR " + regHold + "," + jumpLabel);
+        }
+        else if(operator.equals("GEQUALS"))
+        {
+            emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
+            emit(o, "BLTZR " + regHold + "," + jumpLabel);
+        }
+    }
+    else if(irt.getOp().equals("REPEATCONDITIONS"))
+    {
+        String operator = irt.getSub(0).getOp();
+        String leftCondReg = expression(irt.getSub(1), o);
+        String rightCondReg = expression(irt.getSub(2), o);
+        String regHold = Reg.newReg();
+        String jumpLabel = irt.getSub(3).getSub(0).getSub(0).getOp();
+        if(operator.equals("DEQUALS"))
+        {
+            emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
+            emit(o, "BNEZR " + regHold + "," + jumpLabel);
+        }
+        else if(operator.equals("LESSER"))
+        {
+            emit(o, "SUBR " + regHold + "," + rightCondReg + "," + leftCondReg);
+            emit(o, "BGEZR " + regHold + "," + jumpLabel);
+        }
+        else if(operator.equals("GREATER"))
+        {
             emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
             emit(o, "BGEZR " + regHold + "," + jumpLabel);
         }
+        else if(operator.equals("EQUALS"))
+        {
+            emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
+            emit(o, "BEQZR " + regHold + "," + jumpLabel);
+        }
         else if(operator.equals("GEQUALS"))
+        {
+            emit(o, "SUBR " + regHold + "," + rightCondReg + "," + leftCondReg);
+            emit(o, "BLTZR " + regHold + "," + jumpLabel);
+        }
+        else if(operator.equals("LEQUALS"))
         {
             emit(o, "SUBR " + regHold + "," + leftCondReg + "," + rightCondReg);
             emit(o, "BLTZR " + regHold + "," + jumpLabel);
