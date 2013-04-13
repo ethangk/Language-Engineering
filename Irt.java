@@ -252,7 +252,7 @@ public class Irt
       expression((CommonTree)ast.getChild(0), irt1);
       expression((CommonTree)ast.getChild(1), irt2);
     	if(tt == PLUS)
-         		 irt.addSub(new IRTree("+")); 
+         	 irt.addSub(new IRTree("+")); 
     	else if(tt == MINUS)
     		irt.addSub(new IRTree("-"));
     	else if(tt == TIMES)
