@@ -33,6 +33,7 @@ public class Cg
     else if (irt.getOp().equals("WRR")) {
       String e = expression(irt.getSub(0), o);
       emit(o, "WRR "+e);
+      Reg.freeLast(1);
     }
     else if(irt.getOp().equals("MOVE"))
     {
@@ -47,6 +48,7 @@ public class Cg
       String inReg = Reg.newReg();
       emit(o, "RDR "+ inReg);
       emit(o, "STORE "+inReg+",R0,"+memOffset);
+      Reg.freeLast(1);
     }
     else if(irt.getOp().equals("IF"))
     {
@@ -97,8 +99,15 @@ public class Cg
     if (irt.getOp().equals("CONST"))
     {
           String t = irt.getSub(0).getOp();
-          result = Reg.newReg();
-          emit(o, "MOVIR "+result+","+t);
+          if(t == "0.0")
+          {
+              result = "R0";
+          }
+          else
+          {
+              result = Reg.newReg();
+              emit(o, "MOVIR "+result+","+t);
+          }
     }
     else if (irt.getOp().equals("BINOP"))
     {
@@ -125,8 +134,8 @@ public class Cg
     else if(irt.getOp().equals("MEM"))
     {
           String memAddr = irt.getSub(0).getSub(0).getOp();
-	   result = Reg.newReg();
-	   emit(o, "LOAD "+result+",R0,"+memAddr);
+    	   result = Reg.newReg();
+    	   emit(o, "LOAD "+result+",R0,"+memAddr);
     }
     else if(irt.getOp().equals("IFCONDITIONS"))
     {

@@ -175,15 +175,15 @@ public class Irt
       if(ast.getChildCount() > 2)
       {
          elseTree.addSub(convert((CommonTree)ast.getChild(2)));
+         elseTree.addSub(new IRTree("LABEL", new IRTree("ELSEL"+labelHold)));
          ifType = new IRTree("ELSETYPE");
-         labels.addSub(new IRTree("LABEL", new IRTree("ELSEL"+labelHold)));
       }
       labels.addSub(new IRTree("LABEL", new IRTree("POSTL"+labelHold)));
 
       IRTree ifConditions = new IRTree();
       expression((CommonTree)ast.getChild(0), ifConditions);
       ifConditions.setOp("IFCONDITIONS");
-      ifConditions.addSub(labels);
+      ifTree.addSub( new IRTree("LABEL", new IRTree("POSTL"+labelHold)));
       irt.addSub(ifType);
       irt.addSub(ifConditions);
       irt.addSub(ifTree);
