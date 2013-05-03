@@ -24,6 +24,8 @@ repeat
     repeat
       begin
       num := num * base;
+      write(count);
+      writeln;
       count := count - 1.0;
       end
     until count <= 0.0;
