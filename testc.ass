@@ -1,0 +1,459 @@
+XOR R0,R0,R0
+WRS 0
+WRS 19
+WRS 21
+WRS 25
+WRS 27
+WRS 32
+WRS 34
+MOVIR R2,0.0
+STORE R2,R0,36
+MOVIR R2,1.0
+STORE R2,R0,40
+MOVIR R2,1.0
+STORE R2,R0,44
+MOVIR R2,1.0
+STORE R2,R0,48
+MOVIR R2,0.0
+MOVIR R3,1.0
+SUBR R4,R2,R3
+STORE R4,R0,52
+WRS 56
+WRS 131
+WRS 133
+RDR R4
+STORE R4,R0,160
+WRS 164
+WRS 166
+WRS 232
+WRS 234
+RDR R4
+STORE R4,R0,296
+WRS 300
+LOAD R4,R0,296
+MOVIR R3,1.0
+SUBR R2,R3,R4
+BGEZR R2,L25
+L24: NOP
+L28: NOP
+LOAD R3,R0,40
+LOAD R4,R0,160
+MULR R2,R3,R4
+LOAD R4,R0,160
+MULR R3,R2,R4
+LOAD R4,R0,52
+MULR R2,R3,R4
+STORE R2,R0,40
+LOAD R2,R0,36
+MOVIR R4,2.0
+ADDR R3,R2,R4
+STORE R3,R0,36
+LOAD R3,R0,48
+LOAD R4,R0,36
+MULR R2,R3,R4
+LOAD R4,R0,36
+MOVIR R3,1.0
+SUBR R5,R4,R3
+MULR R3,R2,R5
+STORE R3,R0,48
+LOAD R3,R0,296
+MOVIR R5,1.0
+SUBR R2,R3,R5
+STORE R2,R0,296
+LOAD R2,R0,44
+LOAD R5,R0,40
+LOAD R3,R0,48
+DIVR R4,R5,R3
+ADDR R3,R2,R4
+STORE R3,R0,44
+LOAD R3,R0,296
+MOVIR R4,0.0
+SUBR R2,R3,R4
+BGEZR R2,L28
+WRS 302
+LOAD R4,R0,44
+WRR R4
+WRS 325
+JMP L26
+L25: NOP
+WRS 327
+WRS 375
+L26: NOP
+HALT
+DATA 82 ; R 
+DATA 101 ; e 
+DATA 99 ; c 
+DATA 111 ; o 
+DATA 109 ; m 
+DATA 109 ; m 
+DATA 101 ; e 
+DATA 110 ; n 
+DATA 100 ; d 
+DATA 101 ; e 
+DATA 100 ; d 
+DATA 32 ;   
+DATA 73 ; I 
+DATA 110 ; n 
+DATA 112 ; p 
+DATA 117 ; u 
+DATA 116 ; t 
+DATA 58 ; : 
+DATA 0 ;  
+DATA 10 ;  
+DATA 0 ;  
+DATA 49 ; 1 
+DATA 46 ; . 
+DATA 48 ; 0 
+DATA 0 ;  
+DATA 10 ;  
+DATA 0 ;  
+DATA 50 ; 2 
+DATA 48 ; 0 
+DATA 46 ; . 
+DATA 48 ; 0 
+DATA 0 ;  
+DATA 10 ;  
+DATA 0 ;  
+DATA 10 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 80 ; P 
+DATA 114 ; r 
+DATA 111 ; o 
+DATA 103 ; g 
+DATA 114 ; r 
+DATA 97 ; a 
+DATA 109 ; m 
+DATA 32 ;   
+DATA 116 ; t 
+DATA 111 ; o 
+DATA 32 ;   
+DATA 99 ; c 
+DATA 97 ; a 
+DATA 108 ; l 
+DATA 99 ; c 
+DATA 117 ; u 
+DATA 108 ; l 
+DATA 97 ; a 
+DATA 116 ; t 
+DATA 101 ; e 
+DATA 32 ;   
+DATA 116 ; t 
+DATA 104 ; h 
+DATA 101 ; e 
+DATA 32 ;   
+DATA 99 ; c 
+DATA 111 ; o 
+DATA 115 ; s 
+DATA 105 ; i 
+DATA 110 ; n 
+DATA 101 ; e 
+DATA 32 ;   
+DATA 111 ; o 
+DATA 102 ; f 
+DATA 32 ;   
+DATA 97 ; a 
+DATA 32 ;   
+DATA 103 ; g 
+DATA 105 ; i 
+DATA 118 ; v 
+DATA 101 ; e 
+DATA 110 ; n 
+DATA 32 ;   
+DATA 110 ; n 
+DATA 117 ; u 
+DATA 109 ; m 
+DATA 98 ; b 
+DATA 101 ; e 
+DATA 114 ; r 
+DATA 32 ;   
+DATA 117 ; u 
+DATA 115 ; s 
+DATA 105 ; i 
+DATA 110 ; n 
+DATA 103 ; g 
+DATA 32 ;   
+DATA 97 ; a 
+DATA 32 ;   
+DATA 116 ; t 
+DATA 97 ; a 
+DATA 121 ; y 
+DATA 108 ; l 
+DATA 111 ; o 
+DATA 114 ; r 
+DATA 32 ;   
+DATA 101 ; e 
+DATA 120 ; x 
+DATA 112 ; p 
+DATA 97 ; a 
+DATA 110 ; n 
+DATA 115 ; s 
+DATA 105 ; i 
+DATA 111 ; o 
+DATA 110 ; n 
+DATA 0 ;  
+DATA 10 ;  
+DATA 0 ;  
+DATA 80 ; P 
+DATA 108 ; l 
+DATA 101 ; e 
+DATA 97 ; a 
+DATA 115 ; s 
+DATA 101 ; e 
+DATA 32 ;   
+DATA 101 ; e 
+DATA 110 ; n 
+DATA 116 ; t 
+DATA 101 ; e 
+DATA 114 ; r 
+DATA 32 ;   
+DATA 116 ; t 
+DATA 104 ; h 
+DATA 101 ; e 
+DATA 32 ;   
+DATA 110 ; n 
+DATA 117 ; u 
+DATA 109 ; m 
+DATA 98 ; b 
+DATA 101 ; e 
+DATA 114 ; r 
+DATA 58 ; : 
+DATA 32 ;   
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 10 ;  
+DATA 0 ;  
+DATA 80 ; P 
+DATA 108 ; l 
+DATA 101 ; e 
+DATA 97 ; a 
+DATA 115 ; s 
+DATA 101 ; e 
+DATA 32 ;   
+DATA 101 ; e 
+DATA 110 ; n 
+DATA 116 ; t 
+DATA 101 ; e 
+DATA 114 ; r 
+DATA 32 ;   
+DATA 116 ; t 
+DATA 104 ; h 
+DATA 101 ; e 
+DATA 32 ;   
+DATA 110 ; n 
+DATA 117 ; u 
+DATA 109 ; m 
+DATA 98 ; b 
+DATA 101 ; e 
+DATA 114 ; r 
+DATA 32 ;   
+DATA 111 ; o 
+DATA 102 ; f 
+DATA 32 ;   
+DATA 116 ; t 
+DATA 101 ; e 
+DATA 114 ; r 
+DATA 109 ; m 
+DATA 115 ; s 
+DATA 32 ;   
+DATA 116 ; t 
+DATA 111 ; o 
+DATA 32 ;   
+DATA 98 ; b 
+DATA 101 ; e 
+DATA 32 ;   
+DATA 117 ; u 
+DATA 115 ; s 
+DATA 101 ; e 
+DATA 100 ; d 
+DATA 32 ;   
+DATA 105 ; i 
+DATA 110 ; n 
+DATA 32 ;   
+DATA 116 ; t 
+DATA 104 ; h 
+DATA 101 ; e 
+DATA 32 ;   
+DATA 101 ; e 
+DATA 120 ; x 
+DATA 112 ; p 
+DATA 97 ; a 
+DATA 110 ; n 
+DATA 115 ; s 
+DATA 105 ; i 
+DATA 111 ; o 
+DATA 110 ; n 
+DATA 40 ; ( 
+DATA 62 ; > 
+DATA 49 ; 1 
+DATA 41 ; ) 
+DATA 46 ; . 
+DATA 0 ;  
+DATA 10 ;  
+DATA 0 ;  
+DATA 78 ; N 
+DATA 111 ; o 
+DATA 116 ; t 
+DATA 101 ; e 
+DATA 32 ;   
+DATA 108 ; l 
+DATA 97 ; a 
+DATA 114 ; r 
+DATA 103 ; g 
+DATA 101 ; e 
+DATA 32 ;   
+DATA 110 ; n 
+DATA 117 ; u 
+DATA 109 ; m 
+DATA 98 ; b 
+DATA 101 ; e 
+DATA 114 ; r 
+DATA 115 ; s 
+DATA 32 ;   
+DATA 40 ; ( 
+DATA 62 ; > 
+DATA 50 ; 2 
+DATA 48 ; 0 
+DATA 41 ; ) 
+DATA 32 ;   
+DATA 109 ; m 
+DATA 97 ; a 
+DATA 121 ; y 
+DATA 32 ;   
+DATA 99 ; c 
+DATA 97 ; a 
+DATA 117 ; u 
+DATA 115 ; s 
+DATA 101 ; e 
+DATA 32 ;   
+DATA 102 ; f 
+DATA 108 ; l 
+DATA 111 ; o 
+DATA 97 ; a 
+DATA 116 ; t 
+DATA 105 ; i 
+DATA 110 ; n 
+DATA 103 ; g 
+DATA 32 ;   
+DATA 112 ; p 
+DATA 111 ; o 
+DATA 105 ; i 
+DATA 110 ; n 
+DATA 116 ; t 
+DATA 32 ;   
+DATA 111 ; o 
+DATA 118 ; v 
+DATA 101 ; e 
+DATA 114 ; r 
+DATA 102 ; f 
+DATA 108 ; l 
+DATA 111 ; o 
+DATA 119 ; w 
+DATA 58 ; : 
+DATA 32 ;   
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 0 ;  
+DATA 10 ;  
+DATA 0 ;  
+DATA 40 ; ( 
+DATA 65 ; A 
+DATA 112 ; p 
+DATA 112 ; p 
+DATA 114 ; r 
+DATA 111 ; o 
+DATA 120 ; x 
+DATA 105 ; i 
+DATA 109 ; m 
+DATA 97 ; a 
+DATA 116 ; t 
+DATA 101 ; e 
+DATA 41 ; ) 
+DATA 32 ;   
+DATA 97 ; a 
+DATA 110 ; n 
+DATA 115 ; s 
+DATA 119 ; w 
+DATA 101 ; e 
+DATA 114 ; r 
+DATA 58 ; : 
+DATA 32 ;   
+DATA 0 ;  
+DATA 10 ;  
+DATA 0 ;  
+DATA 84 ; T 
+DATA 104 ; h 
+DATA 101 ; e 
+DATA 32 ;   
+DATA 110 ; n 
+DATA 117 ; u 
+DATA 109 ; m 
+DATA 98 ; b 
+DATA 101 ; e 
+DATA 114 ; r 
+DATA 32 ;   
+DATA 111 ; o 
+DATA 102 ; f 
+DATA 32 ;   
+DATA 116 ; t 
+DATA 101 ; e 
+DATA 114 ; r 
+DATA 109 ; m 
+DATA 115 ; s 
+DATA 32 ;   
+DATA 103 ; g 
+DATA 105 ; i 
+DATA 118 ; v 
+DATA 101 ; e 
+DATA 110 ; n 
+DATA 32 ;   
+DATA 109 ; m 
+DATA 117 ; u 
+DATA 115 ; s 
+DATA 116 ; t 
+DATA 32 ;   
+DATA 98 ; b 
+DATA 101 ; e 
+DATA 32 ;   
+DATA 108 ; l 
+DATA 97 ; a 
+DATA 114 ; r 
+DATA 103 ; g 
+DATA 101 ; e 
+DATA 114 ; r 
+DATA 32 ;   
+DATA 116 ; t 
+DATA 104 ; h 
+DATA 97 ; a 
+DATA 110 ; n 
+DATA 32 ;   
+DATA 49 ; 1 
+DATA 0 ;  
+DATA 10 ;  
+DATA 0 ;  
