@@ -120,7 +120,7 @@ public class Cg
     }
     else if(irt.getOp().equals("LABEL"))
     {
-      emit(o, irt.getSub(0).getOp() + ": NOP");
+      emit(o, irt.getSub(0).getOp() + ":");
     }
     else {
       error("statement - " + irt.getOp());
