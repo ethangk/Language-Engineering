@@ -69,14 +69,21 @@ class camle {
     	  System.exit(0);
       }
       CommonTreeNodeStream ast = new CommonTreeNodeStream(parserTree);
-      IRTree newIrt = Irt.convert(parserTree);
-      if (opt.equals("-irt")) {
-        System.out.println(newIrt);
-        Memory.dumpData(System.out);
-        System.exit(0);
+      try
+      {
+          IRTree newIrt = Irt.convert(parserTree);
+          if (opt.equals("-irt")) {
+            System.out.println(newIrt);
+            Memory.dumpData(System.out);
+            System.exit(0);
+          }
+          PrintStream o = new PrintStream(new FileOutputStream(outFile));
+          Cg.program(newIrt, o);
       }
-      PrintStream o = new PrintStream(new FileOutputStream(outFile));
-      Cg.program(newIrt, o);
+      catch (Exception e)
+      {
+          System.exit(0);
+      }
     }
     catch(Exception e) {
       System.err.println("exception: "+e);

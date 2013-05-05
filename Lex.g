@@ -14,6 +14,7 @@ IF         : 'if' ;
 READ       : 'read' ;
 REPEAT     : 'repeat' ;
 UNTIL      : 'until' ;
+WHILE	   : 'while' ; 
 
 //---------------------------------------------------------------------------
 // OPERATORS
@@ -43,7 +44,7 @@ EXPONENT     : 'e' ('-')? INT ;
 fragment 
 INT          : ('0'..'9')+ ;
 
-IDENT        : CHAR ( INT | CHAR )* ;
+//IDENT        : CHAR ( INT | CHAR )* ;
 
 fragment
 CHAR         : ('A'..'Z' | 'a'..'z') ;
@@ -53,3 +54,10 @@ STRING       : '\'' ('\'' '\'' | ~'\'')* '\'';
 COMMENT      : '{' (~'}')* '}' {skip();} ;
 
 WS           : (' ' | '\t' | '\r' | '\n' )+ {skip();} ;
+
+
+IDENT 
+: CHAR CHARORINT?;
+CHARORINT
+@init {int N = 0;} 
+: ((CHAR | ('0'..'9')) {N++;} )+{N<=8}?;

@@ -27,37 +27,39 @@ public class Irt
 //c
 // CAMLE TOKENS BEGIN
   public static final String[] tokenNames = new String[] {
-"NONE", "NONE", "NONE", "NONE", "BEGIN", "END", "WRITE", "WRITELN", "ELSE", "IF", "READ", "REPEAT", "UNTIL", "SEMICOLON", "OPENPAREN", "CLOSEPAREN", "GREATER", "LESSER", "EQUALS", "DEQUALS", "GEQUALS", "LEQUALS", "PLUS", "MINUS", "TIMES", "DIVIDE", "ASSIGN", "INT", "EXPONENT", "REALNUM", "CHAR", "IDENT", "STRING", "COMMENT", "WS"};
-  public static final int CLOSEPAREN=15;
-  public static final int GEQUALS=20;
-  public static final int EXPONENT=28;
+"NONE", "NONE", "NONE", "NONE", "BEGIN", "END", "WRITE", "WRITELN", "ELSE", "IF", "READ", "REPEAT", "UNTIL", "WHILE", "SEMICOLON", "OPENPAREN", "CLOSEPAREN", "GREATER", "LESSER", "EQUALS", "DEQUALS", "GEQUALS", "LEQUALS", "PLUS", "MINUS", "TIMES", "DIVIDE", "ASSIGN", "INT", "EXPONENT", "REALNUM", "CHAR", "STRING", "COMMENT", "WS", "CHARORINT", "IDENT"};
+  public static final int CLOSEPAREN=16;
+  public static final int GEQUALS=21;
+  public static final int EXPONENT=29;
+  public static final int WHILE=13;
   public static final int ELSE=8;
-  public static final int CHAR=30;
-  public static final int INT=27;
-  public static final int SEMICOLON=13;
-  public static final int EQUALS=18;
-  public static final int MINUS=23;
+  public static final int CHAR=31;
+  public static final int INT=28;
+  public static final int SEMICOLON=14;
+  public static final int EQUALS=19;
+  public static final int MINUS=24;
   public static final int WRITE=6;
-  public static final int LEQUALS=21;
+  public static final int LEQUALS=22;
+  public static final int DEQUALS=20;
   public static final int IF=9;
-  public static final int DEQUALS=19;
+  public static final int LESSER=18;
   public static final int WS=34;
-  public static final int GREATER=16;
-  public static final int LESSER=17;
+  public static final int GREATER=17;
   public static final int WRITELN=7;
   public static final int READ=10;
   public static final int UNTIL=12;
   public static final int BEGIN=4;
-  public static final int REALNUM=29;
-  public static final int ASSIGN=26;
-  public static final int IDENT=31;
-  public static final int PLUS=22;
+  public static final int REALNUM=30;
+  public static final int ASSIGN=27;
+  public static final int IDENT=36;
+  public static final int PLUS=23;
   public static final int REPEAT=11;
-  public static final int OPENPAREN=14;
+  public static final int OPENPAREN=15;
   public static final int END=5;
-  public static final int TIMES=24;
+  public static final int TIMES=25;
   public static final int COMMENT=33;
-  public static final int DIVIDE=25;
+  public static final int CHARORINT=35;
+  public static final int DIVIDE=26;
   public static final int STRING=32;
 // CAMLE TOKENS END
 
@@ -100,6 +102,7 @@ public class Irt
       }
     }
     else {
+      System.out.println("STATEMENTSSSSS error");
       error(tt);
     }
   }
@@ -263,7 +266,49 @@ public class Irt
         irt1.addSub(irt2);
         irt.addSub(irt1);
     }
+    else if(tt == WHILE)
+    {
+        irt.setOp("SEQ");
+        
+         String preLabel =      Irt.addLabel();
+         IRTree preLabelTree =  new IRTree("LABEL",  new IRTree(preLabel));
+
+        String postLabel =      Irt.addLabel();
+        IRTree postLabelTree =  new IRTree("LABEL",  new IRTree(postLabel));
+
+        
+        IRTree postLabelHold = new IRTree("SEQ", new IRTree("JUMP", new IRTree(preLabel)));
+        postLabelHold.addSub(postLabelTree);
+
+        irt.addSub(preLabelTree);
+        
+        IRTree whileTree = new IRTree("SEQ");
+        IRTree whileCode = new IRTree();
+        statements((CommonTree)ast.getChild(1), whileCode);
+        whileTree.addSub(whileCode);
+        whileTree.addSub(postLabelHold);
+        
+        IRTree seqTree = new IRTree("SEQ");
+        IRTree jumpTree = new IRTree("CJUMP");
+
+
+        //left and right side of the comparison
+        IRTree e1 = new IRTree();
+        IRTree e2 = new IRTree();
+        expression((CommonTree)ast.getChild(0).getChild(0), e1);
+        expression((CommonTree)ast.getChild(0).getChild(1), e2);
+
+        //System.out.println(ast.getChild(0).getText());
+        jumpTree.addSub(new IRTree(ast.getChild(0).getText()));
+        jumpTree.addSub(e1);
+        jumpTree.addSub(e2);
+        jumpTree.addSub(new IRTree(postLabel));
+        seqTree.addSub(jumpTree);
+        seqTree.addSub(whileTree);
+        irt.addSub(seqTree);
+    }
     else {
+      System.out.println("Statement error");
       error(tt);
     }
   }
@@ -340,6 +385,7 @@ public class Irt
       irt.setOp(tx);
     }
     else {
+      System.out.println("Constant error");
       error(tt);
     }
   }

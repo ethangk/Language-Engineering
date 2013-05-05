@@ -30,6 +30,7 @@ statement :
     variable ASSIGN^ expression
   | READ^ OPENPAREN! variable CLOSEPAREN!
   | REPEAT^ compoundstatement UNTIL! booltype
+  | WHILE^ booltype compoundstatement
   | IF^ booltype
        compoundstatement
     (ELSE!
