@@ -10,6 +10,8 @@ import org.antlr.runtime.tree.*;
 public class Cg
 {
   // Generate code from a program (in IRTree form)
+  static String lastLabel = "none";
+
   public static void program(IRTree irt, PrintStream o)
   {
     emit(o, "XOR R0,R0,R0");   // Initialize R0 to 0
@@ -120,7 +122,8 @@ public class Cg
     }
     else if(irt.getOp().equals("LABEL"))
     {
-      emit(o, irt.getSub(0).getOp() + ":");
+      //emit(o, irt.getSub(0).getOp() + ":");
+      emitLabel(o, irt.getSub(0).getOp());
     }
     else {
       error("statement - " + irt.getOp());
@@ -177,7 +180,21 @@ public class Cg
   // Generate an instruction
   private static void emit(PrintStream o, String s)
   {
-    o.println(s);
+    if(lastLabel.equals("none"))
+      o.println(s);
+    else
+    {
+      o.println(lastLabel + ":" + s);
+      lastLabel = "none";
+    }
+  }
+
+  public static void emitLabel(PrintStream o, String labelName)
+  {
+    System.out.println("storing " + labelName);
+    if(!lastLabel.equals("none"))
+        o.println(lastLabel+":NOP");
+    lastLabel = labelName;
   }
 
   // Error

@@ -124,9 +124,6 @@ public class Irt
   // Convert a statement AST to IR tree
   public static void statement(CommonTree ast, IRTree irt)
   {
-
-
-    labelcount++;
     CommonTree ast1;
     IRTree irt1 = new IRTree();
     Token t = ast.getToken();
