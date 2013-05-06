@@ -173,15 +173,55 @@ public class Irt
     }
     else if(tt == IF)
     {
-      irt.setOp("SEQ");
-      irt1.setOp("CJUMP");
-      irt.addSub(irt1);
+
+
       IRTree e1 = new IRTree();
       IRTree e2 = new IRTree();
 
       expression((CommonTree)ast.getChild(0).getChild(0), e1);
       expression((CommonTree)ast.getChild(0).getChild(1), e2);
-      System.out.println(e1.getOp());
+      System.out.println("op1 = " + e1.getOp() + ", op2 = " + e2.getOp()+ " and " + ast.getChild(0).getText());
+      if(e1.getOp() == "CONST" && e2.getOp() == "CONST" && preProcess)
+      {
+          boolean breakOut = false;
+          double v1 = Double.parseDouble(e1.getSub(0).getOp());
+          double v2 = Double.parseDouble(e2.getSub(0).getOp());
+          String whatDo = ast.getChild(0).getText();
+          if(whatDo.equals("<"))
+          {
+              breakOut = v1 < v2;
+          }
+          else if(whatDo.equals(">"))
+          {
+              breakOut = v1 > v2;
+          }
+          else if(whatDo.equals("="))
+          {
+              breakOut = v1 == v2;
+          }
+          else if(whatDo.equals("!="))
+          {
+              breakOut = v1 != v2;
+          }
+          else if(whatDo.equals(">="))
+          {
+              breakOut = v1 >= v2;
+          }
+          else if(whatDo.equals("<="))
+          {
+              breakOut = v1 <= v2;
+          }
+          if(!breakOut && ast.getChildCount() <= 2)
+          {
+            irt.setOp("NOOP");
+            return;
+          }
+      }
+      
+      irt.setOp("SEQ");
+      irt1.setOp("CJUMP");
+      irt.addSub(irt1);
+
       //Add op, left side of op and right side of op, labels
       irt1.addSub(new IRTree(ast.getChild(0).getText()));
       irt1.addSub(e1);
@@ -356,7 +396,7 @@ public class Irt
       IRTree irt2 = new IRTree();
       expression(ex1, irt1);
       expression(ex2, irt2);
-      if(irt1.getOp() == "CONST" && irt2.getOp() == "CONST" && preProcess)
+      if(irt1.getOp() == "CONST" && irt2.getOp() == "CONST")
       {
             //two realnums, lets preprocess
             double n1 = Double.parseDouble(irt1.getSub(0).getOp());
@@ -370,7 +410,8 @@ public class Irt
               case DIVIDE: outVal = n1/n2; break;
             }
 
-            irt1.setOp(String.valueOf(outVal).substring(0, 9));
+            String s = String.valueOf(outVal);
+            irt1.setOp(s.substring(0, Math.min(s.length(), 10)));
             irt.setOp("CONST");
             irt.addSub(irt1);
       }
