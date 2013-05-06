@@ -64,6 +64,7 @@ public class Irt
 // CAMLE TOKENS END
 
   public static int labelcount = 0;
+  private static boolean preProcess = true;
 
   public static String addLabel()
   {
@@ -180,6 +181,7 @@ public class Irt
 
       expression((CommonTree)ast.getChild(0).getChild(0), e1);
       expression((CommonTree)ast.getChild(0).getChild(1), e2);
+      System.out.println(e1.getOp());
       //Add op, left side of op and right side of op, labels
       irt1.addSub(new IRTree(ast.getChild(0).getText()));
       irt1.addSub(e1);
@@ -348,20 +350,45 @@ public class Irt
     else if(tt == PLUS || tt == MINUS || tt == TIMES || tt == DIVIDE)
     {
       //do something
-      irt.setOp("BINOP");
+      
+      CommonTree ex1 = (CommonTree)ast.getChild(0);
+      CommonTree ex2 = (CommonTree)ast.getChild(1);
       IRTree irt2 = new IRTree();
-      expression((CommonTree)ast.getChild(0), irt1);
-      expression((CommonTree)ast.getChild(1), irt2);
-      if(tt == PLUS)
-           irt.addSub(new IRTree("+")); 
-      else if(tt == MINUS)
-        irt.addSub(new IRTree("-"));
-      else if(tt == TIMES)
-        irt.addSub(new IRTree("*"));
-      else if(tt == DIVIDE)
-        irt.addSub(new IRTree("/"));
-       irt.addSub(irt1);
-       irt.addSub(irt2);
+      expression(ex1, irt1);
+      expression(ex2, irt2);
+      if(irt1.getOp() == "CONST" && irt2.getOp() == "CONST" && preProcess)
+      {
+            //two realnums, lets preprocess
+            double n1 = Double.parseDouble(irt1.getSub(0).getOp());
+            double n2 = Double.parseDouble(irt2.getSub(0).getOp());
+            double outVal = 0.0;
+            switch(tt)
+            {
+              case PLUS: outVal = n1+n2; break;
+              case MINUS: outVal = n1-n2; break;
+              case TIMES: outVal = n1*n2; break;
+              case DIVIDE: outVal = n1/n2; break;
+            }
+
+            irt1.setOp(String.valueOf(outVal).substring(0, 9));
+            irt.setOp("CONST");
+            irt.addSub(irt1);
+      }
+      else
+      {
+          irt.setOp("BINOP");
+
+          if(tt == PLUS)
+               irt.addSub(new IRTree("+")); 
+          else if(tt == MINUS)
+            irt.addSub(new IRTree("-"));
+          else if(tt == TIMES)
+            irt.addSub(new IRTree("*"));
+          else if(tt == DIVIDE)
+            irt.addSub(new IRTree("/"));
+           irt.addSub(irt1);
+           irt.addSub(irt2);
+      }
     }
     else if(tt == IDENT)
     {

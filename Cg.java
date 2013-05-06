@@ -193,7 +193,7 @@ public class Cg
   {
     System.out.println("storing " + labelName);
     if(!lastLabel.equals("none"))
-        o.println(lastLabel+":NOP");
+        o.println(lastLabel+":");
     lastLabel = labelName;
   }
 

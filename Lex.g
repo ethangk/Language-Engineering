@@ -2,6 +2,26 @@
 
 lexer grammar Lex;
 
+
+@members {
+	
+	/*
+	static int numNameErrors = 0;
+
+    public void displayRecognitionError(String[] tokenNames,
+                                        RecognitionException e) {
+        
+        String hdr = getErrorHeader(e);
+        String msg = getErrorMessage(e, tokenNames);
+        if(msg.equals("rule CHARORINT failed predicate: {N<=8}?"))
+        {
+        	numNameErrors++;
+        }
+        // Now do something with hdr and msg...
+    }*/
+}
+
+
 //---------------------------------------------------------------------------
 // KEYWORDS
 //---------------------------------------------------------------------------
@@ -36,6 +56,8 @@ ASSIGN       : ':=' ;
 
 
 
+
+
 REALNUM      :  INT '.' INT (EXPONENT)?;
 
 fragment 
@@ -61,3 +83,4 @@ IDENT
 CHARORINT
 @init {int N = 0;} 
 : ((CHAR | ('0'..'9')) {N++;} )+{N<=8}?;
+
