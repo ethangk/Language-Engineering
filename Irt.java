@@ -180,7 +180,6 @@ public class Irt
 
       expression((CommonTree)ast.getChild(0).getChild(0), e1);
       expression((CommonTree)ast.getChild(0).getChild(1), e2);
-      System.out.println("op1 = " + e1.getOp() + ", op2 = " + e2.getOp()+ " and " + ast.getChild(0).getText());
       if(e1.getOp() == "CONST" && e2.getOp() == "CONST" && preProcess)
       {
           boolean breakOut = false;

@@ -35,6 +35,8 @@ class camle {
     outFile = outFile+".ass";
 
     try {
+      int numSynErrors;
+      int numErrors;
       CharStream cs = new ANTLRFileStream(inFile);			
       Lex lexO = new Lex(cs);
       if (opt.equals("-lex")) {
@@ -44,14 +46,35 @@ class camle {
           System.out.println(T.getType()+" \""+T.getText()+"\"");
           T = lexO.nextToken();
         }
+        numErrors = lexO.getLexErrors();
+        if(numErrors != 0) {
+            System.out.println("Lexer failed: " + numErrors + " errors, Exiting...");
+        }
         System.exit(0);
       }
       CommonTokenStream tokens = new CommonTokenStream(lexO);
       Syn synO = new Syn(tokens);
       Syn.program_return parserResult = synO.program();//start rule
+      numErrors = lexO.getLexErrors();
+      if(numErrors != 0) {
+        System.out.println("Lexer failed: " + numErrors + " errors");
+      }
       CommonTree parserTree = (CommonTree) parserResult.getTree();
       if (opt.equals("-syn")) {
         System.out.println(parserTree.toStringTree());
+        numErrors = synO.getSynErrors();
+        if(numErrors != 0) {
+            System.out.println("Syn stage failed: " + numErrors + " errors,Exiting...");
+        }
+        System.exit(0);
+      }
+      numSynErrors = synO.getSynErrors();
+      if(numSynErrors != 0) {
+        System.out.println("Syn stage failed: " + numErrors + " errors");
+        System.exit(0);
+      }
+      if(numErrors != 0 || numSynErrors != 0) {
+        System.out.println("Exiting...");
         System.exit(0);
       }
       if (opt.equals("-tree")) {

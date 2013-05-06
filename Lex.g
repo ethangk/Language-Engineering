@@ -5,20 +5,28 @@ lexer grammar Lex;
 
 @members {
 	
-	/*
-	static int numNameErrors = 0;
+	static int lexErrors = 0;
 
     public void displayRecognitionError(String[] tokenNames,
                                         RecognitionException e) {
         
         String hdr = getErrorHeader(e);
         String msg = getErrorMessage(e, tokenNames);
-        if(msg.equals("rule CHARORINT failed predicate: {N<=8}?"))
+        lexErrors++;
+        if(e instanceof FailedPredicateException)
         {
-        	numNameErrors++;
+            System.out.println("Lex error: var name > 9 characters");
+        } 
+        else if(e instanceof Exception)
+        {
+            System.out.println("Lex error: " + hdr + " " + msg);
         }
-        // Now do something with hdr and msg...
-    }*/
+    }
+
+  public int getLexErrors()
+  {
+    return lexErrors;
+  }
 }
 
 

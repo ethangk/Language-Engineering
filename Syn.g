@@ -9,6 +9,9 @@ options {
 
 @members
 {
+
+  
+  int synErrors = 0;
 	private String cleanString(String s){
 		String tmp;
 		tmp = s.replaceAll("^'", "");
@@ -16,6 +19,20 @@ options {
 		tmp = s.replaceAll("''", "'");
 		return tmp;
 	}
+
+  public void displayRecognitionError(String[] tokenNames, RecognitionException e)
+  {
+        synErrors++;                              
+        String hdr = getErrorHeader(e);
+        String msg = getErrorMessage(e, tokenNames);
+        System.out.println("Syn error: " + hdr + " " + msg);
+  }
+
+  public int getSynErrors()
+  {
+    return synErrors;
+  }
+
 }
 
 program :
